@@ -5,6 +5,21 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>React Native Shadow Generator</title>
+	<meta name="description"
+		content="Creates shadows for Android and IOS, in a simple way, just informing the amount of shadow and that\'s it, copied to the clipboard">
+	<meta name="keywords" content="How To set shadows, React Native, Shadow Generator, Android, IOS, styled components">
+	<meta name="robots" content="">
+	<meta name="revisit-after" content="1 day">
+	<meta name="language" content="English">
+	<meta name="generator" content="N/A">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+	<script>
+		(adsbygoogle = window.adsbygoogle || []).push({
+			google_ad_client: "ca-pub-1268637111637402",
+			enable_page_level_ads: true
+		});
+	</script>
 	<style>
 		html,
 		body {
@@ -23,7 +38,7 @@
 			left: -20px;
 			background: rgba(0, 0, 0, 0.08);
 			padding: 10px 10px 20px 10px;
-			color:#000;
+			color: #000;
 			border-radius: 5px;
 			animation: move 1.5s infinite;
 			cursor: pointer;
@@ -41,10 +56,10 @@
 		}
 
 		div.codePreview {
-			
+
 			border-radius: 5px;
-			background: #242424	;
-			color:#fff;
+			background: #242424;
+			color: #fff;
 			padding: 45px 35px 15px 35px;
 			min-width: 350px;
 
@@ -58,7 +73,7 @@
 
 		div.codePreview:before {
 			content: "Code";
-			color:#242424;
+			color: #242424;
 			border-top-right-radius: 10px;
 			border-top-left-radius: 10px;
 			width: 100%;
@@ -424,16 +439,16 @@
 			}
 		}
 
-		.propriedade{
-			color:#66D9EF		;
+		.propriedade {
+			color: #66D9EF;
 		}
 
-		.atributo{
-			color:#FFEE99		;
+		.atributo {
+			color: #FFEE99;
 		}
 
-		.number{
-			color:#FF80F4;
+		.number {
+			color: #FF80F4;
 		}
 	</style>
 </head>
@@ -581,7 +596,7 @@
 			x: values[0],
 			y: values[1],
 			blur: values[2],
-			spread: values[3], 
+			spread: values[3],
 		};
 	}
 
@@ -615,17 +630,17 @@
 
 	function copyCode() {
 		const copied = document.querySelector('code').innerText
-		
+
 		const temporaryInput = document.createElement("input");
 
 		temporaryInput.value = copied;
-	
+
 		document.body.appendChild(temporaryInput);
-		
+
 		temporaryInput.select();
-	
+
 		document.execCommand('copy');
-	
+
 		document.body.removeChild(temporaryInput);
 
 		snackbar();
