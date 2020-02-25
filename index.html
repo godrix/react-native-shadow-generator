@@ -1,178 +1,491 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
+
 <head>
 	<meta charset="UTF-8">
-	<meta name="viewport"
-	      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>React Native Shadow Generator</title>
 	<style>
-		* {
-			margin: 0;
-			padding: 0;
-			text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.004);
-			text-rendering: optimizeLegibility !important;
-			-webkit-font-smoothing: antialiased !important;
-			box-sizing: border-box;
-		}
+		html,
 		body {
-			font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-			font-size: 16px;
-			line-height: 1.5em;
-
-			background-color: #f4f4f4;
-		}
-		.label {
+			width: 100%;
+			height: 100%;
+			background: #f9f9f9;
+			margin: 0;
 			display: flex;
-			justify-content: space-between;
-			margin-bottom: 30px;
-
-			color: #ccc;
-			font-size: 12px;
-			font-weight: bold;
-			text-transform: uppercase;
-		}
-
-		.row {
-			display: flex;
-			align-items: stretch;
-			height: 70%;
-		}
-
-		.row:first-child {
-			height: 30%;
-		}
-
-		.row > div {
-			display: flex;
-			align-items: center;
 			justify-content: center;
-
-			width: 50vw;
-			padding: 30px;
+			align-items: center;
 		}
 
-		input {
+		.tip {
+			position: absolute;
+			top: -8px;
+			left: -20px;
+			background: rgba(0, 0, 0, 0.08);
+			padding: 10px 10px 20px 10px;
+			color:#000;
+			border-radius: 5px;
+			animation: move 1.5s infinite;
+			cursor: pointer;
+		}
+
+		.tip:before {
+			position: absolute;
+			left: 50%;
+			bottom: -12px;
+			transform: translateX(-50%);
+			content: "";
+			border-right: 12px solid transparent;
+			border-top: 12px solid rgba(0, 0, 0, 0.08);
+			border-left: 12px solid transparent;
+		}
+
+		div.codePreview {
+			
+			border-radius: 5px;
+			background: #242424	;
+			color:#fff;
+			padding: 45px 35px 15px 35px;
+			min-width: 350px;
+
+			display: flex;
+			justify-content: center;
+			position: relative;
+
+			font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+			font-size: 1rem;
+		}
+
+		div.codePreview:before {
+			content: "Code";
+			color:#242424;
+			border-top-right-radius: 10px;
+			border-top-left-radius: 10px;
 			width: 100%;
+			height: 35px;
+			left: 0;
+			top: 0;
+			position: absolute;
+			display: flex;
+			justify-content: center;
+			align-items: center;
 		}
 
-		.controls > div:first-child {
-			border-right: 1px solid #fff;
+		div.codePreview>.dots {
+			position: absolute;
+			border-radius: 50%;
+			border: 1px solid rgba(0, 0, 0, 0.2);
 		}
 
-		.depth {
+		div.codePreview>input {
+			width: 16px;
+			height: 16px;
+			top: 8px;
+			opacity: 0;
+		}
+
+		div.codePreview>input.dots:nth-child(2) {
+			left: 8px;
+		}
+
+		div.codePreview>input.dots:nth-child(3) {
+			left: 37px;
+		}
+
+		div.codePreview>input.dots:nth-child(4) {
+			left: 68px;
+		}
+
+		div.codePreview>span.dots {
+			background: rgb(254, 190, 4);
+
+			width: 15px;
+			height: 15px;
+
+			top: 10px;
+			left: 40px;
+		}
+
+		div.codePreview>span.dots:before {
+			background: rgb(254, 97, 82);
+			position: absolute;
+			content: "";
+			width: 15px;
+			height: 15px;
+			border-radius: 50%;
+			border: 1px solid rgba(0, 0, 0, 0.2);
+			top: -1px;
+			left: -30px;
+		}
+
+		div.codePreview>span.dots:after {
+			background: rgb(23, 205, 58);
+			position: absolute;
+			content: "";
+			width: 15px;
+			height: 15px;
+			border-radius: 50%;
+			border: 1px solid rgba(0, 0, 0, 0.2);
+			top: -1px;
+			left: 30px;
+		}
+
+		div.codePreview>code {
+			display: block;
+		}
+
+		div.codePreview {
+
+			border-radius: 15px;
+
+			padding: 45px 35px 15px 35px;
+			min-width: 350px;
+
+			display: flex;
+			justify-content: center;
+			position: relative;
+
+			font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+			font-size: 1rem;
+		}
+
+		div.codePreview:before {
+			background: #f2f2f2;
+			border-bottom: 1px solid #ccc;
+
+			content: "Code";
+
 			width: 100%;
-			max-width: 600px;
+			height: 35px;
+			left: 0;
+			top: 0;
+			position: absolute;
+			display: flex;
+			justify-content: center;
+			align-items: center;
 		}
 
-		.preview {
-			background-color: #fff;
+		div.codePreview>.dots {
+			position: absolute;
+			border-radius: 50%;
+			border: 1px solid rgba(0, 0, 0, 0.2);
 		}
 
-		.preview > div:first-child {
-			border-right: 1px solid #eee;
+		div.codePreview>input {
+			width: 16px;
+			height: 16px;
+			top: 8px;
+			opacity: 0;
 		}
 
-		.box {
-			width: 300px;
-			height: 200px;
-
-			border-radius: 3px;
-
-			transition: box-shadow 280ms ease;
+		div.codePreview>input.dots:nth-child(2) {
+			left: 8px;
 		}
 
-		code {
-			color: #333;
-			tab-size: 4;
+		div.codePreview>input.dots:nth-child(3) {
+			left: 37px;
 		}
 
-		@media (max-width: 62em) {
-			.row {
-				display: block;
-				height: auto !important;
+		div.codePreview>input.dots:nth-child(4) {
+			left: 68px;
+		}
+
+		div.codePreview>span.dots {
+			background: rgb(254, 190, 4);
+
+			width: 15px;
+			height: 15px;
+
+			top: 10px;
+			left: 40px;
+		}
+
+		div.codePreview>span.dots:before {
+			background: rgb(254, 97, 82);
+			position: absolute;
+			content: "";
+			width: 15px;
+			height: 15px;
+			border-radius: 50%;
+			border: 1px solid rgba(0, 0, 0, 0.2);
+			top: -1px;
+			left: -30px;
+		}
+
+		div.codePreview>span.dots:after {
+			background: rgb(23, 205, 58);
+			position: absolute;
+			content: "";
+			width: 15px;
+			height: 15px;
+			border-radius: 50%;
+			border: 1px solid rgba(0, 0, 0, 0.2);
+			top: -1px;
+			left: 30px;
+		}
+
+		div.codePreview>code {
+			display: block;
+		}
+
+		div.Depth {
+			box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.3);
+			border-radius: 15px;
+			margin-left: 50px;
+			padding: 45px 35px 15px 35px;
+			min-width: 350px;
+
+			display: flex;
+			justify-content: center;
+			position: relative;
+
+			font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+			font-size: 1rem;
+		}
+
+		div.Depth:before {
+			background: #f2f2f2;
+			border-bottom: 1px solid #ccc;
+			border-top-left-radius: 15px;
+			border-top-right-radius: 15px;
+			content: "Depth";
+
+			width: 100%;
+			height: 35px;
+			left: 0;
+			top: 0;
+			position: absolute;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
+
+		div.Depth>.dots {
+			position: absolute;
+			border-radius: 50%;
+			border: 1px solid rgba(0, 0, 0, 0.2);
+		}
+
+		div.Depth>input {
+			width: 16px;
+			height: 16px;
+			top: 8px;
+			opacity: 0;
+		}
+
+		div.Depth>input.dots:nth-child(2) {
+			left: 8px;
+		}
+
+		div.Depth>input.dots:nth-child(3) {
+			left: 37px;
+		}
+
+		div.Depth>input.dots:nth-child(4) {
+			left: 68px;
+		}
+
+		div.Depth>span.dots {
+			background: rgb(254, 190, 4);
+
+			width: 15px;
+			height: 15px;
+
+			top: 10px;
+			left: 40px;
+		}
+
+		div.Depth>span.dots:before {
+			background: rgb(254, 97, 82);
+			position: absolute;
+			content: "";
+			width: 15px;
+			height: 15px;
+			border-radius: 50%;
+			border: 1px solid rgba(0, 0, 0, 0.2);
+			top: -1px;
+			left: -30px;
+		}
+
+		div.Depth>span.dots:after {
+			background: rgb(23, 205, 58);
+			position: absolute;
+			content: "";
+			width: 15px;
+			height: 15px;
+			border-radius: 50%;
+			border: 1px solid rgba(0, 0, 0, 0.2);
+			top: -1px;
+			left: 30px;
+		}
+
+		div.Depth>code {
+			display: block;
+		}
+
+		input.dots:nth-child(2):checked+input.dots:nth-child(3):not(:checked)+input.dots:nth-child(4):not(:checked)+code {
+			display: none;
+		}
+
+		input.dots:nth-child(2):not(:checked)+input.dots:nth-child(3):checked+input.dots:nth-child(4):not(:checked)+code {
+			display: none;
+		}
+
+		input.dots:nth-child(2):not(:checked)+input.dots:nth-child(3):not(:checked)+input.dots:nth-child(4):checked+code {
+			display: none;
+		}
+
+		input.dots:nth-child(2):checked+input.dots:nth-child(3):checked+input.dots:nth-child(4):checked+code {
+			display: none;
+		}
+
+		@keyframes move {
+			0% {
+				top: -80px;
 			}
 
-			.row > div {
-				width: 100%;
-				justify-content: flex-start;
+			50% {
+				top: -60px;
 			}
 
-		    .preview > div {
-			    padding: 50px;
-		    }
+			100% {
+				top: -80px;
+			}
+		}
 
-			.preview > div:first-child {
-				padding-bottom: 0;
+		#snackbar {
+			visibility: hidden;
+			font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+			min-width: 250px;
+			margin-left: -125px;
+			background-color: #333;
+			color: #fff;
+			text-align: center;
+			border-radius: 10px;
+			padding: 16px;
+			position: fixed;
+			z-index: 1;
+			left: 50%;
+			bottom: 30px;
+			font-size: 17px;
+		}
+
+		#snackbar.show {
+			visibility: visible;
+			-webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+			animation: fadein 0.5s, fadeout 0.5s 2.5s;
+		}
+
+		@-webkit-keyframes fadein {
+			from {
+				bottom: 0;
+				opacity: 0;
 			}
 
-			.preview > div div {
-				width: 100%;
+			to {
+				bottom: 30px;
+				opacity: 1;
+			}
+		}
+
+		@keyframes fadein {
+			from {
+				bottom: 0;
+				opacity: 0;
 			}
 
-		    .box {
-			    width: calc(100% - 100px);
-		    }
+			to {
+				bottom: 30px;
+				opacity: 1;
+			}
+		}
+
+		@-webkit-keyframes fadeout {
+			from {
+				bottom: 30px;
+				opacity: 1;
+			}
+
+			to {
+				bottom: 0;
+				opacity: 0;
+			}
+		}
+
+		@keyframes fadeout {
+			from {
+				bottom: 30px;
+				opacity: 1;
+			}
+
+			to {
+				bottom: 0;
+				opacity: 0;
+			}
+		}
+
+		.propriedade{
+			color:#66D9EF		;
+		}
+
+		.atributo{
+			color:#FFEE99		;
+		}
+
+		.number{
+			color:#FF80F4;
 		}
 	</style>
 </head>
-<body>
 
-<div class="row controls">
-	<div>
+<body>
+	<div class="codePreview" id="preview">
+		<span class="dots"></span>
+		<input type="checkbox" class="dots" />
+		<input type="checkbox" class="dots" />
+		<input type="checkbox" class="dots" />
+		<code>
+			<span class="propriedade">shadowColor</span>: <span class="atributo">"#000"</span>,</br>
+    	<span class="propriedade">shadowOffset</span>: {</br>
+				&nbsp;<span class="propriedade">width</span> <span class="number">0</span>,</br>
+				&nbsp;<span class="propriedade">height</span> <span id="height" class="number">0</span>,</br>
+    	},</br>
+    	<span class="propriedade">shadowOpacity</span>: <span id="opacity" class="number">0.6</span>,</br>
+    	<span class="propriedade">shadowRadius</span> <span id="radius" class="number">0</span>,</br>
+			<span class="propriedade">elevation</span> <span id="elevation" class="number">4</span>,</br>
+		 </br>
+		</code>
+		<div class="tip" title='tap to copy' onclick="copyCode()">
+			Tap to copy
+		</div>
+	</div>
+	<br>
+
+	<div class="Depth">
+		<span class="dots"></span>
+		<input type="checkbox" class="dots" />
+		<input type="checkbox" class="dots" />
+		<input type="checkbox" class="dots" />
 		<div class="depth">
-			<label class="label" for="depth">
-				Depth
-				<span id="amount">4</span>
-			</label>
+			<span id="amount">4</span>
 			<input type="range" min="1" max="24" id="depth" value="4">
 		</div>
 	</div>
-	<div>
-		<div>
-<pre><code id="code"><!--
--->shadowColor: "#000",
-shadowOffset: {
-	width: 0,
-	height: <span id="height">0</span>,
-},
-shadowOpacity: <span id="opacity">0.6</span>,
-shadowRadius: <span id="radius">0</span>,
-
-elevation: <span id="elevation">4</span>,<!--
---></code></pre>
-		</div>
-	</div>
-</div>
-
-<div class="row preview">
-	<div>
-		<div>
-			<div class="label">Android</div>
-			<div class="box" id="previewAndroid"></div>
-		</div>
-	</div>
-	<div>
-		<div>
-			<div class="label">iOS</div>
-			<div class="box" id="previewIos"></div>
-		</div>
-	</div>
-</div>
-
+	<div id="snackbar">copy to clipboard</div>
+</body>
 <script>
+
+
 	const range = document.getElementById("depth")
 		, amount = document.getElementById("amount")
 		, code = document.getElementById("code")
-		, previewAndroid = document.getElementById("previewAndroid")
-		, previewIos = document.getElementById("previewIos");
+		, preview = document.getElementById("preview")
 
 	const elevation = document.getElementById("elevation")
 		, height = document.getElementById("height")
 		, opacity = document.getElementById("opacity")
 		, radius = document.getElementById("radius");
 
-	// @see https://github.com/material-components/material-components-web/blob/master/packages/mdc-elevation/_variables.scss
 	const androidDepth = {
 		umbra: [
 			"0px 2px 1px -1px",
@@ -255,31 +568,31 @@ elevation: <span id="elevation">4</span>,<!--
 		],
 	}
 		, androidColor = {
-		umbra: "rgba(0,0,0,0.2)",
-		penumbra: "rgba(0,0,0,0.14)",
-		ambient: "rgba(0,0,0,0.12)",
-	};
+			umbra: "rgba(0,0,0,0.2)",
+			penumbra: "rgba(0,0,0,0.14)",
+			ambient: "rgba(0,0,0,0.12)",
+		};
 
 	let depth = 4;
 
-	function parseShadow (raw) {
+	function parseShadow(raw) {
 		const values = raw.split(" ").map(val => +val.replace("px", ""));
 		return {
 			x: values[0],
 			y: values[1],
 			blur: values[2],
-			spread: values[3], // unused
+			spread: values[3], 
 		};
 	}
 
-	function interpolate (i, a, b, a2, b2) {
+	function interpolate(i, a, b, a2, b2) {
 		return (i - a) * (b2 - a2) / (b - a) + a2;
 	}
 
-	function onDepthChange () {
-		// Previews
-		amount.textContent = depth + 1;
-		previewAndroid.style.boxShadow = `
+	function onDepthChange() {
+
+		amount.innerHTML = depth + 1;
+		preview.style.boxShadow = `
 			${androidDepth.umbra[depth]} ${androidColor.umbra},
 			${androidDepth.penumbra[depth]} ${androidColor.penumbra},
 			${androidDepth.ambient[depth]} ${androidColor.ambient}
@@ -289,19 +602,10 @@ elevation: <span id="elevation">4</span>,<!--
 
 		const y = s.y === 1 ? 1 : Math.floor(s.y * 0.5);
 
-		previewIos.style.boxShadow = `
-			${s.x}px
-			${y}px
-			${s.blur}px
-			0
-			rgba(0,0,0,0.35)
-		`;
-
-		// Code
-		height.textContent = y;
-		opacity.textContent = interpolate(depth, 1, 24, 0.2, 0.6).toFixed(2);
-		radius.textContent = interpolate(s.blur, 1, 38, 1, 16).toFixed(2);//(s.blur * 0.45).toFixed(2);
-		elevation.textContent = depth + 1;
+		height.innerHTML = y;
+		opacity.innerHTML = interpolate(depth, 1, 24, 0.2, 0.6).toFixed(2);
+		radius.innerHTML = interpolate(s.blur, 1, 38, 1, 16).toFixed(2);
+		elevation.innerHTML = depth + 1;
 	}
 
 	range.addEventListener("input", () => {
@@ -309,8 +613,31 @@ elevation: <span id="elevation">4</span>,<!--
 		onDepthChange();
 	});
 
+	function copyCode() {
+		const copied = document.querySelector('code').innerText
+		
+		const temporaryInput = document.createElement("input");
+
+		temporaryInput.value = copied;
+	
+		document.body.appendChild(temporaryInput);
+		
+		temporaryInput.select();
+	
+		document.execCommand('copy');
+	
+		document.body.removeChild(temporaryInput);
+
+		snackbar();
+	}
+
+	function snackbar() {
+		const snackbar = document.getElementById("snackbar");
+		snackbar.className = "show";
+		setTimeout(function () { snackbar.className = snackbar.className.replace("show", ""); }, 3000);
+	}
+
 	onDepthChange();
 </script>
 
-</body>
 </html>
